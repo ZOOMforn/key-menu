@@ -47,6 +47,11 @@ app.get("/validate", (req, res) => {
   res.json({ valid: true });
 });
 
+// Rota para a raiz
+app.get("/", (req, res) => {
+  res.send("API de Keys do Roblox");
+});
+
 // Inicia o servidor
 app.listen(port, () => {
   console.log("Servidor rodando na porta " + port);

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Keys do Roblox</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .response {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Gerador de Keys</h2>
+    <button id="generateKey">Gerar Key</button>
+    <input type="text" id="keyInput" placeholder="Sua key aparecerá aqui..." readonly>
+    <button id="validateKey">Validar Key</button>
+    <div class="response" id="response"></div>
+  </div>
+
+  <script>
+    const generateKeyButton = document.getElementById('generateKey');
+    const validateKeyButton = document.getElementById('validateKey');
+    const keyInput = document.getElementById('keyInput');
+    const responseDiv = document.getElementById('response');
+
+    const API_URL = 'https://seuapp.onrender.com'; // Substitua pela URL do seu backend
+
+    // Função para gerar uma key aleatória
+    function generateKey() {
+      const key = Math.random().toString(36).substring(2, 10).toUpperCase();
+      keyInput.value = key;
+    }
+
+    // Função para validar a key
+    async function validateKey() {
+      const key = keyInput.value;
+      if (!key) {
+        alert('Por favor, gere uma key primeiro.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_URL}/validate?key=${key}`);
+        const data = await response.json();
+
+        if (data.valid) {
+          responseDiv.textContent = 'Key válida!';
+          responseDiv.style.color = 'green';
+        } else {
+          responseDiv.textContent = `Key inválida: ${data.reason}`;
+          responseDiv.style.color = 'red';
+        }
+      } catch (error) {
+        responseDiv.textContent = 'Erro ao validar a key.';
+        responseDiv.style.color = 'red';
+      }
+    }
+
+    generateKeyButton.addEventListener('click', generateKey);
+    validateKeyButton.addEventListener('click', validateKey);
+  </script>
+
+</body>
+</html>
